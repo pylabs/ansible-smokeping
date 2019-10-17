@@ -1,0 +1,25 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location = /smokeping/smokeping.cgi {
+        fastcgi_intercept_errors on;
+        root /usr/lib;
+        include /etc/nginx/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME /usr/lib/cgi-bin/smokeping.cgi;
+        fastcgi_pass unix:/var/run/fcgiwrap.socket;
+    }
+
+    location ^~ /smokeping/ {
+        alias /usr/share/smokeping/www/;
+        gzip off;
+    }
+}
+

@@ -1,0 +1,40 @@
+---
+- name: setup smokeping
+  block:
+    - name: install smokeping related packages
+      apt:
+        name: "{{ packages }}"
+        state: "latest"
+      vars:
+        packages:
+          - smokeping
+          - fcgiwrap
+    - name: setup smokeping nginx config
+      copy:
+        src: "smokeping_nginx"
+        dest: "/etc/nginx/sites-available/smokeping"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+    - name: activate smokeping nginx config
+      file:
+        src: /etc/nginx/sites-available/smokeping
+        dest: /etc/nginx/sites-enabled/smokeping
+        owner: root
+        group: root
+        state: link
+    - name: delte default nginx config
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+    - name: start service
+      systemd:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - smokeping.service
+        - fcgiwrap.service
+        - nginx.service
+  tags:
+    - smokeping

@@ -1,0 +1,18 @@
+galaxy_info:
+  role_name: smokeping
+  author: William Wu
+  description: Setup SmokePing
+  company: PyLabs
+  license: MIT
+  min_ansible_version: 2.4
+  platforms:
+  - name: Debian
+    versions:
+    - Buster
+    - 10
+  galaxy_tags:
+    - debian
+    - smokeping
+    - monitoring
+dependencies:
+  - pylabs.nginx
