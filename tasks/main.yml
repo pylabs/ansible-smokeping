@@ -23,7 +23,7 @@
         owner: root
         group: root
         state: link
-    - name: delte default nginx config
+    - name: delete default nginx config
       file:
         path: /etc/nginx/sites-enabled/default
         state: absent
