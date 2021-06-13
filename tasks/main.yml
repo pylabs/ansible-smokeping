@@ -2,7 +2,7 @@
 - name: setup smokeping
   block:
     - name: install smokeping related packages
-      apt:
+      ansible.builtin.apt:
         name: "{{ packages }}"
         state: "latest"
       vars:
@@ -10,25 +10,25 @@
           - smokeping
           - fcgiwrap
     - name: setup smokeping nginx config
-      copy:
+      ansible.builtin.copy:
         src: "smokeping_nginx"
         dest: "/etc/nginx/sites-available/smokeping"
         owner: "root"
         group: "root"
         mode: "0644"
     - name: activate smokeping nginx config
-      file:
+      ansible.builtin.file:
         src: /etc/nginx/sites-available/smokeping
         dest: /etc/nginx/sites-enabled/smokeping
         owner: root
         group: root
         state: link
     - name: delete default nginx config
-      file:
+      ansible.builtin.file:
         path: /etc/nginx/sites-enabled/default
         state: absent
     - name: start service
-      systemd:
+      ansible.builtin.systemd:
         name: "{{ item }}"
         state: started
         enabled: yes
